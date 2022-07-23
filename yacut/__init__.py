@@ -9,4 +9,4 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-from yacut import views  # noqa
+from yacut import views, error_handlers
