@@ -16,7 +16,9 @@ class URL_map(db.Model):
         """Serializes URL_map object to dictionary."""
         out = dict(url=self.original)
         if show_short:
-            link = url_for('redirect_view', custom_id=self.short, _external=True)
+            link = url_for(
+                'redirect_view', custom_id=self.short, _external=True
+            )
             out.update(dict(short_link=link))
         return out
 

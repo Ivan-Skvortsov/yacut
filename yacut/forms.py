@@ -3,7 +3,7 @@ from wtforms import URLField, StringField, SubmitField
 from wtforms.validators import (DataRequired, Length, Optional, Regexp,
                                 URL, ValidationError)
 
-from yacut.models import URL_map
+from yacut.services import short_id_exists_in_db
 
 
 class URLMapForm(FlaskForm):
@@ -22,7 +22,7 @@ class URLMapForm(FlaskForm):
             ),
             Regexp(
                 r'^[a-zA-Z0-9]+$',
-                message='Ссылка должна содержать только латинские буквы и цифры'
+                message='Ссылка должна состоять из цифр и латинских букв'
             ),
             Optional()
         ]
@@ -31,7 +31,7 @@ class URLMapForm(FlaskForm):
 
     def validate_custom_id(form, field):
         """Validates if given custom_id unique."""
-        if URL_map.query.filter_by(short=field.data).first() is not None:
+        if short_id_exists_in_db(field.data):
             raise ValidationError(
                 f'Имя {field.data} уже занято! Выберите, пожалуйста, другое!'
             )

@@ -10,3 +10,8 @@ def get_unique_short_id():
         id = ''.join(random.choices(string.digits + string.ascii_letters, k=6))
         if URL_map.query.filter_by(short=id).first() is None:
             return id
+
+
+def short_id_exists_in_db(short_id):
+    """Checks if given short_id already extists in database."""
+    return URL_map.query.filter_by(short=short_id).first() is not None

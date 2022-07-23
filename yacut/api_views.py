@@ -5,7 +5,7 @@ from flask import jsonify, request
 from yacut import app, db
 from yacut.models import URL_map
 from yacut.error_handlers import APIExceptionHandler
-from yacut.services import get_unique_short_id
+from yacut.services import get_unique_short_id, short_id_exists_in_db
 
 
 @app.route('/api/id/', methods=['POST'])
@@ -41,8 +41,12 @@ def validate_api_input(data):
     if not custom_id:
         return
     if not 1 < len(custom_id) < 16:
-        raise APIExceptionHandler('Указано недопустимое имя для короткой ссылки', 400)
+        raise APIExceptionHandler(
+            'Указано недопустимое имя для короткой ссылки', 400
+        )
     if not re.match(r'^[a-zA-Z0-9]+$', custom_id):
-        raise APIExceptionHandler('Указано недопустимое имя для короткой ссылки', 400)
-    if URL_map.query.filter_by(short=custom_id).first() is not None:
+        raise APIExceptionHandler(
+            'Указано недопустимое имя для короткой ссылки', 400
+        )
+    if short_id_exists_in_db(custom_id):
         raise APIExceptionHandler(f'Имя "{custom_id}" уже занято.', 400)
