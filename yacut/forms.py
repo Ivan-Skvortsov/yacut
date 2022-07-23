@@ -33,5 +33,5 @@ class URLMapForm(FlaskForm):
         """Validates if given custom_id unique."""
         if URL_map.query.filter_by(short=field.data).first() is not None:
             raise ValidationError(
-                'Такая ссылка уже занята! Пожалуйста, выберите другую.'
+                f'Имя {field.data} уже занято! Выберите, пожалуйста, другое!'
             )
